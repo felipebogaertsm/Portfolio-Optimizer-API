@@ -3,28 +3,27 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"text/template"
 )
 
 const portNumber string = "8080"
 
 // Home is the home page handler
 func Home(w http.ResponseWriter, r *http.Request) {
-	var sum float64
-
-	for i := 0; i < 1000; i++ {
-		sum = sum + float64(i)
-	}
-
-	n, err := fmt.Fprintf(w, fmt.Sprintf("The sum is equal to: %.2f", sum))
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(fmt.Sprintf("Number of bytes written: %d", n))
+	renderTemplate(w, "home.page.tmpl")
 }
 
 // About is the about page handler
 func About(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "About page")
+	renderTemplate(w, "about.page.tmpl")
+}
+
+func renderTemplate(w http.ResponseWriter, tmpl string) {
+	parsedTemplate, _ := template.ParseFiles("./templates/" + tmpl)
+	err := parsedTemplate.Execute(w, nil)
+	if err != nil {
+		fmt.Println("Error parsing template: ", err)
+	}
 }
 
 // main is the main function
