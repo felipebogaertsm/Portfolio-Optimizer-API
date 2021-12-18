@@ -1,19 +1,23 @@
+// Author: Felipe Bogaerts de Mattos
+// email: felipebogaerts@gmail.com
+// License: MIT
+
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"webapi/views"
+	. "popt/apps/data"
+
+	"github.com/gin-gonic/gin"
 )
 
 const portNumber string = "8080"
+const inProduction = false
 
 // main is the main function
 func main() {
-	http.HandleFunc("/", views.Home)
-	http.HandleFunc("/about", views.About)
+	router := gin.Default()
 
-	// Start web server:
-	fmt.Println(fmt.Sprintf("Starting web server on port %s...", portNumber))
-	_ = http.ListenAndServe(fmt.Sprintf(":%s", portNumber), nil)
+	router.GET("/data/read", DataReadCsvController)
+
+	router.Run(":" + portNumber)
 }
