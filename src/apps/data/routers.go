@@ -7,5 +7,5 @@ package data
 import "github.com/gin-gonic/gin"
 
 func DataReadCsv(router *gin.RouterGroup) {
-	router.GET("/get", DataReadCsvController)
+	router.GET("/get", DataReadCSVController)
 }

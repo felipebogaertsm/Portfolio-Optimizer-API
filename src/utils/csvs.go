@@ -6,11 +6,27 @@ package utils
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io"
+	"log"
 	"os"
+
+	"github.com/go-gota/gota/dataframe"
 )
 
-func ReadCsvFile(filePath string) [][]string {
+func ReadCSVFile(filePath string) [][]string {
+	// Opening csv file:
+	file, err := os.Open(filePath)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Using gota to read from the CSV:
+	df := dataframe.ReadCSV(file)
+
+	fmt.Println(df)
+
 	// Creating data slice:
 	data := make([][]string, 0)
 

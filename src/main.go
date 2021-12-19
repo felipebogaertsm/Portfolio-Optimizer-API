@@ -17,7 +17,7 @@ const inProduction = false
 func main() {
 	router := gin.Default()
 
-	router.GET("/data/read", DataReadCsvController)
+	router.GET("/data/read", DataReadCSVController)
 
 	router.Run(":" + portNumber)
 }

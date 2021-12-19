@@ -10,10 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DataReadCsvController(c *gin.Context) {
+func DataReadCSVController(c *gin.Context) {
 	filePath := "public/stocks.csv"
 
-	csvFileData := ReadCsvFile(filePath)
+	csvFileData := ReadCSVFile(filePath)
 
 	c.JSON(200, gin.H{"data": csvFileData})
 }
