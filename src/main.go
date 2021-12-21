@@ -19,6 +19,7 @@ func main() {
 
 	router.GET("/data/read", DataReadCSVController)
 	router.GET("/data/mean", DataMeanController)
+	router.GET("/data/markowitz", MarkowitzOutputController)
 
 	router.Run(":" + portNumber)
 }

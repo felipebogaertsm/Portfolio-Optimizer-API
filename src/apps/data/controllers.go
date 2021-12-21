@@ -24,11 +24,23 @@ func DataReadCSVController(c *gin.Context) {
 }
 
 func DataMeanController(c *gin.Context) {
-	meanData := GetAnualisedReturns(filePath)
+	csvFileDataFrame := ReadCSVFile(filePath)
+	meanData := GetAnualisedReturns(csvFileDataFrame)
 
 	// Exporting dataframe to JSON:
 	buffer := new(bytes.Buffer)
 	_ = meanData.WriteJSON(buffer)
+
+	c.JSON(200, gin.H{"data": buffer.String()})
+}
+
+func MarkowitzOutputController(c *gin.Context) {
+	csvFileDataFrame := ReadCSVFile(filePath)
+	df := MarkowitzOptimizer(csvFileDataFrame)
+
+	// Exporting dataframe to JSON:
+	buffer := new(bytes.Buffer)
+	_ = df.WriteJSON(buffer)
 
 	c.JSON(200, gin.H{"data": buffer.String()})
 }
