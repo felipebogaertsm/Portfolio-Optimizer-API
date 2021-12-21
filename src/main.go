@@ -18,6 +18,7 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/data/read", DataReadCSVController)
+	router.GET("/data/mean", DataMeanController)
 
 	router.Run(":" + portNumber)
 }

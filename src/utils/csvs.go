@@ -5,14 +5,13 @@
 package utils
 
 import (
-	"bytes"
 	"log"
 	"os"
 
 	"github.com/go-gota/gota/dataframe"
 )
 
-func ReadCSVFile(filePath string) string {
+func ReadCSVFile(filePath string) dataframe.DataFrame {
 	// Opening csv file:
 	file, err := os.Open(filePath)
 
@@ -22,9 +21,5 @@ func ReadCSVFile(filePath string) string {
 
 	// Using gota to read from the CSV:
 	df := dataframe.ReadCSV(file)
-
-	buffer := new(bytes.Buffer)
-	_ = df.WriteJSON(buffer)
-
-	return buffer.String()
+	return df
 }
