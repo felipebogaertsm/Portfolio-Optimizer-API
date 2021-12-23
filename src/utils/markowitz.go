@@ -5,10 +5,10 @@
 package utils
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/go-gota/gota/dataframe"
+	"github.com/go-gota/gota/series"
 )
 
 func MarkowitzOptimizer(df dataframe.DataFrame) dataframe.DataFrame {
@@ -24,13 +24,14 @@ func MarkowitzOptimizer(df dataframe.DataFrame) dataframe.DataFrame {
 	numberOfAssets := len(assetNames) // number of assets
 	rand.Seed(75)                     // fixed seed, for reproducibility
 
+	var portfolioReturnSlice []float64
+	var portfolioVarianceSlice []float64
+
 	// Generate portfolios:
 	for i := 0; i < numberOfPortfolios; i++ {
 
 		// Choose random asset:
 		randomAssetIndexes := rand.Perm(numberOfAssets)
-		randomAsset := assetNames[rand.Intn(numberOfAssets)]
-		dataCol := df.Col(randomAsset)
 
 		// Generate random weights
 		var weights []float64
@@ -66,9 +67,15 @@ func MarkowitzOptimizer(df dataframe.DataFrame) dataframe.DataFrame {
 			}
 		}
 
-		fmt.Println(i, dataCol, weights, portfolioReturn, portfolioVariance)
+		portfolioReturnSlice = append(portfolioReturnSlice, portfolioReturn)
+		portfolioVarianceSlice = append(portfolioVarianceSlice, portfolioVariance)
 
 	}
 
-	return df
+	portfolioReturnVarianceDf := dataframe.New(
+		series.New(portfolioReturnSlice, series.Float, "Return"),
+		series.New(portfolioVarianceSlice, series.Float, "Variance"),
+	)
+
+	return portfolioReturnVarianceDf
 }
