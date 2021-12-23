@@ -12,12 +12,12 @@ import (
 )
 
 func MarkowitzOptimizer(df dataframe.DataFrame) dataframe.DataFrame {
-	// Deleting date column:
-	df = df.Drop(0)
-
 	// Getting mean values:
 	dfAnualisedReturns := GetAnualisedReturns(df)
-	covarianceSlice := GetCovariance(df)
+	dfCovariance := GetCovariance(df)
+
+	// Deleting date column:
+	df = df.Drop(0)
 
 	numberOfPortfolios := 1000        // number of portfolios to sample
 	assetNames := df.Names()          // data column names or asset names
@@ -56,10 +56,11 @@ func MarkowitzOptimizer(df dataframe.DataFrame) dataframe.DataFrame {
 			}
 			portfolioReturn += weightedAnualisedReturns
 
-			for k := 0; k < numberOfAssets; j++ {
+			for k := 0; k < numberOfAssets; k++ {
 				weightedPortfolioVariance := 0.0
-				for l := 0; l < len(covarianceSlice); l++ {
-					weightedPortfolioVariance += weights[j] * weights[k] * covarianceSlice[j][k]
+				covarianceCol := dfCovariance.Col(assetNames[k])
+				for l := 0; l < covarianceCol.Len(); l++ {
+					weightedPortfolioVariance += weights[j] * weights[k] * covarianceCol.Elem(k).Float()
 				}
 				portfolioVariance += weightedPortfolioVariance
 			}

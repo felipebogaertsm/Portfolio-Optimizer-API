@@ -34,6 +34,17 @@ func DataMeanController(c *gin.Context) {
 	c.JSON(200, gin.H{"data": buffer.String()})
 }
 
+func DataCovarianceController(c *gin.Context) {
+	csvFileDataFrame := ReadCSVFile(filePath)
+	covarianceData := GetCovariance(csvFileDataFrame)
+
+	// Exporting dataframe to JSON:
+	buffer := new(bytes.Buffer)
+	_ = covarianceData.WriteJSON(buffer)
+
+	c.JSON(200, gin.H{"data": buffer.String()})
+}
+
 func MarkowitzOutputController(c *gin.Context) {
 	csvFileDataFrame := ReadCSVFile(filePath)
 	df := MarkowitzOptimizer(csvFileDataFrame)
