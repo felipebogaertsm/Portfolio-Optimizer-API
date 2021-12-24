@@ -5,6 +5,7 @@
 package utils
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/go-gota/gota/dataframe"
@@ -46,12 +47,20 @@ func GetCovariance(df dataframe.DataFrame) dataframe.DataFrame {
 		var covarianceDfCol []float64
 		for i := 0; i < len(colNames); i++ {
 			colYName := colNames[i]
+			colXName := s.Name
+			xMean := s.Mean()
+			yMean := df.Col(colYName).Mean()
 			sum := 0.0 // sum of all elements
 			// Iterate through all elements of the series (col)
 			for j := 0; j < s.Len(); j++ {
-				sum += (s.Elem(j).Float() - s.Mean()) * (df.Col(colYName).Elem(j).Float() - df.Col(colYName).Mean())
+				xValue := s.Elem(j).Float()
+				yValue := df.Col(colYName).Elem(j).Float()
+				// fmt.Println(xValue, xMean, yValue, yMean)
+				sum += (xValue - xMean) * (yValue - yMean)
 			}
-			covarianceDfCol = append(covarianceDfCol, sum/(float64(len(colNames)-1)))
+			currentCovarianceValue := sum / (float64(len(colNames) - 1)) * 252 / 1000
+			covarianceDfCol = append(covarianceDfCol, currentCovarianceValue)
+			fmt.Println(colXName, colYName, currentCovarianceValue)
 		}
 		return series.Floats(covarianceDfCol)
 	})

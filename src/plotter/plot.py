@@ -9,6 +9,7 @@ Reads from the return_variance_data.json file.
 """
 
 import plotly.graph_objects as go
+import numpy as np
 import pandas as pd
 
 # Forming lists:
@@ -20,14 +21,23 @@ variance_array = dataframe["Variance"].to_numpy()
 fig = go.Figure(
     data=go.Scatter(
         y=return_array * 100,
-        x=variance_array,
+        x=np.sqrt(variance_array) * 100,
         mode="markers",
         marker=dict(
-            size=10,
-            colorscale="Viridis",  # one of plotly colorscales
+            color=return_array / np.sqrt(variance_array),
             showscale=True,
+            size=7,
+            line=dict(width=1),
+            colorscale="RdBu",
+            colorbar=dict(title="Sharpe<br>Ratio"),
         ),
     )
 )
+fig.update_layout(
+    xaxis=dict(title="Annualised Risk (Volatility)"),
+    yaxis=dict(title="Annualised Return"),
+    title="Sample of Random Portfolios",
+)
+fig.update_layout(coloraxis_colorbar=dict(title="Sharpe Ratio"))
 
 fig.show()
