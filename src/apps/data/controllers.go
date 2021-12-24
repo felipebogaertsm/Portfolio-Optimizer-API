@@ -6,6 +6,7 @@ package data
 
 import (
 	"bytes"
+	"os"
 	. "popt/utils"
 
 	"github.com/gin-gonic/gin"
@@ -52,6 +53,10 @@ func MarkowitzOutputController(c *gin.Context) {
 	// Exporting dataframe to JSON:
 	buffer := new(bytes.Buffer)
 	_ = df.WriteJSON(buffer)
+
+	// Exporting dataframe to JSON file:
+	file, _ := os.Create("plotter/return_variance_data.json")
+	df.WriteJSON(file)
 
 	c.JSON(200, gin.H{"data": buffer.String()})
 }
