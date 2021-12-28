@@ -18,9 +18,9 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/data/read", DataReadCSVController)
-	router.GET("/data/mean", DataMeanController)
-	router.GET("/data/covariance", DataCovarianceController)
-	router.GET("/data/markowitz", MarkowitzOutputController)
+	router.GET("/calculations/mean", DataMeanController)
+	router.GET("/calculations/covariance", DataCovarianceController)
+	router.GET("/optimizer/markowitz", MarkowitzOutputController)
 
 	router.Run(":" + portNumber)
 }
